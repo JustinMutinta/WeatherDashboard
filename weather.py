@@ -10,26 +10,6 @@ from urllib import error, parse, request
 BASE_WEATHER_API_URL = "http://api.openweathermap.org/data/2.5/weather"
 PADDING = 20
 
-def read_user_cli_args():
-    """Handles the CLI user interactions.
-
-    Returns:
-        argparse.Namespace: Populated namespace object
-    """
-    parser = argparse.ArgumentParser(
-        description="gets weather and temperature information for a city"
-    )
-    parser.add_argument(
-        "city", nargs="+", type=str, help="enter the city name"
-    )
-    parser.add_argument(
-        "-i",
-        "--imperial",
-        action="store_true",
-        help="display the temperature in imperial units",
-    )
-    return parser.parse_args()
-
 
 def build_weather_query(city_input, imperial=False):
     api_key = _get_api_key()
@@ -43,13 +23,6 @@ def build_weather_query(city_input, imperial=False):
 
 
 def _get_api_key():
-    """Fetch the API key from your configuration file.
-
-    Expects a configuration file named "secrets.ini" with structure:
-
-        [openweather]
-        api_key=<YOUR-OPENWEATHER-API-KEY>
-    """
     config = ConfigParser()
     config.read("secrets.ini")
     return config["openweather"]["api_key"]
@@ -89,17 +62,17 @@ def display_weather_info(weather_data, imperial=False):
     print(f"{humidity}%")
 
 
+def simple_output(location):
+    query_url = build_weather_query(location, "-i")
+    weather_data = get_weather_data(query_url)
+    # print(weather_data)
+    display_weather_info(weather_data)
+    # print(x)
+    time.sleep(1)
+
+
 if __name__ == "__main__":
-    # user_args = read_user_cli_args()
     user_args = ["Dallas", "Lusaka", "Miami", "Austin", "Houston", "London"]
-    print(user_args)
-    print(type(user_args))
-    # user_args = "new york"
 
     for x in user_args:
-        query_url = build_weather_query(x, "-i")
-        weather_data = get_weather_data(query_url)
-        # print(weather_data)
-        display_weather_info(weather_data)
-        # print(x)
-        time.sleep(1)
+        simple_output(x)
