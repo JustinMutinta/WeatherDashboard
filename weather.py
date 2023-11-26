@@ -32,17 +32,8 @@ def read_user_cli_args():
 
 
 def build_weather_query(city_input, imperial=False):
-    """Builds the URL for an API request to OpenWeather's weather API.
-
-    Args:
-        city_input (List[str]): Name of a city as collected by argparse
-        imperial (bool): Whether or not to use imperial units for temperature
-
-    Returns:
-        str: URL formatted for a call to OpenWeather's city name endpoint
-    """
     api_key = _get_api_key()
-    url_encoded_city_name = "Dallas"
+    url_encoded_city_name = city_input
     units = "imperial" if imperial else "metric"
     url = (
         f"{BASE_WEATHER_API_URL}?q={url_encoded_city_name}"
@@ -65,14 +56,6 @@ def _get_api_key():
 
 
 def get_weather_data(query_url):
-    """Makes an API request to a URL and returns the data as a Python object.
-
-    Args:
-        query_url (str): URL formatted for OpenWeather's city name endpoint
-
-    Returns:
-        dict: Weather information for a specific city
-    """
     try:
         response = request.urlopen(query_url)
     except error.HTTPError as http_error:
@@ -92,14 +75,6 @@ def get_weather_data(query_url):
 
 
 def display_weather_info(weather_data, imperial=False):
-    """Prints formatted weather information about a city.
-
-    Args:
-        weather_data (dict): API response from OpenWeather by city name
-        imperial (bool): Whether or not to use imperial units for temperature
-
-    More information at https://openweathermap.org/current#name
-    """
     city = weather_data["name"]
     weather_description = weather_data["weather"][0]["description"]
     temperature = weather_data["main"]["temp"]
@@ -113,16 +88,16 @@ def display_weather_info(weather_data, imperial=False):
 
 
 if __name__ == "__main__":
-    user_args = read_user_cli_args()
-    # user_args = "Dallas"
+    # user_args = read_user_cli_args()
+    user_args = ["Dallas", "Lusaka"]
     print(user_args)
     print(type(user_args))
     # user_args = "new york"
 
-    for x in range(10):
-        query_url = build_weather_query(user_args.city, user_args.imperial)
-        # query_url = build_weather_query(user_args, "-i")
+    for x in user_args:
+        query_url = build_weather_query(x, "-i")
         weather_data = get_weather_data(query_url)
-        display_weather_info(weather_data, user_args.imperial)
+        print(weather_data)
+        display_weather_info(weather_data)
         print(x)
         time.sleep(1)
