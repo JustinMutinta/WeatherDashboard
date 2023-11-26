@@ -59,15 +59,15 @@ def display_weather_info(weather_data, imperial=False):
     temperature = weather_data["main"]["temp"]
     humidity = weather_data["main"]["humidity"]
 
-    print(f"{dateTime_string:^{PADDING}}", end="")
-    print(f"{time_string:^{PADDING}}", end="")
-    print(f"{city:^{PADDING}}", end="")
-    print(
-        f"\t{weather_description.capitalize():^{PADDING}}",
-        end=" ",
-    )
-    print(f"{temperature}°{'F' if imperial else 'C'}", end=" ")
-    print(f"{humidity}%")
+    # print(f"{dateTime_string:^{PADDING}}", end="")
+    # print(f"{time_string:^{PADDING}}", end="")
+    # print(f"{city:^{PADDING}}", end="")
+    # print(
+    #     f"\t{weather_description.capitalize():^{PADDING}}",
+    #     end=" ",
+    # )
+    # print(f"{temperature}°{'F' if imperial else 'C'}", end=" ")
+    # print(f"{humidity}%")
 
     with open("weather.csv", "a", newline="") as f:
         writer = csv.writer(f)
@@ -83,7 +83,7 @@ def simple_output(location):
 if __name__ == "__main__":
     user_args = ["Dallas", "Lusaka", "Miami", "Austin", "Houston", "London"]
 
-    for x in range(1):
+    while True:
         for x in user_args:
             simple_output(x)
-        time.sleep(1)
+        time.sleep(300)
