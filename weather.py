@@ -4,6 +4,7 @@ import argparse
 import json
 import sys
 import time
+import csv
 from datetime import datetime
 from configparser import ConfigParser
 from urllib import error, parse, request
@@ -68,20 +69,21 @@ def display_weather_info(weather_data, imperial=False):
     print(f"{temperature}°{'F' if imperial else 'C'}", end=" ")
     print(f"{humidity}%")
 
+    with open("weather.csv", "a", newline="") as f:
+        writer = csv.writer(f)
+        # writer.writerow(["Date", "Time", "Location", "Weather", "Temperature", "Humidity"])
+        writer.writerow([dateTime_string, time_string, city, weather_description, temperature, humidity])
 
 def simple_output(location):
     query_url = build_weather_query(location, "-i")
     weather_data = get_weather_data(query_url)
-    # print(weather_data)
     display_weather_info(weather_data)
-    # print(x)
-    # time.sleep(1)
 
 
 if __name__ == "__main__":
     user_args = ["Dallas", "Lusaka", "Miami", "Austin", "Houston", "London"]
 
-    for x in range(6):
+    for x in range(1):
         for x in user_args:
             simple_output(x)
         time.sleep(1)
