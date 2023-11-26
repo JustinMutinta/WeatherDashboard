@@ -3,6 +3,7 @@
 import argparse
 import json
 import sys
+import time
 from configparser import ConfigParser
 from urllib import error, parse, request
 
@@ -41,8 +42,7 @@ def build_weather_query(city_input, imperial=False):
         str: URL formatted for a call to OpenWeather's city name endpoint
     """
     api_key = _get_api_key()
-    city_name = " ".join(city_input)
-    url_encoded_city_name = parse.quote_plus(city_name)
+    url_encoded_city_name = "Dallas"
     units = "imperial" if imperial else "metric"
     url = (
         f"{BASE_WEATHER_API_URL}?q={url_encoded_city_name}"
@@ -114,6 +114,15 @@ def display_weather_info(weather_data, imperial=False):
 
 if __name__ == "__main__":
     user_args = read_user_cli_args()
-    query_url = build_weather_query(user_args.city, user_args.imperial)
-    weather_data = get_weather_data(query_url)
-    display_weather_info(weather_data, user_args.imperial)
+    # user_args = "Dallas"
+    print(user_args)
+    print(type(user_args))
+    # user_args = "new york"
+
+    for x in range(10):
+        query_url = build_weather_query(user_args.city, user_args.imperial)
+        # query_url = build_weather_query(user_args, "-i")
+        weather_data = get_weather_data(query_url)
+        display_weather_info(weather_data, user_args.imperial)
+        print(x)
+        time.sleep(1)
