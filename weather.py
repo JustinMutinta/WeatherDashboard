@@ -4,6 +4,7 @@ import argparse
 import json
 import sys
 import time
+from datetime import datetime
 from configparser import ConfigParser
 from urllib import error, parse, request
 
@@ -48,11 +49,17 @@ def get_weather_data(query_url):
 
 
 def display_weather_info(weather_data, imperial=False):
+    now = datetime.now()
+    dateTime_string = now.strftime("%Y-%m-%d")
+    time_string = now.strftime("%H:%M:%S")
+
     city = weather_data["name"]
     weather_description = weather_data["weather"][0]["description"]
     temperature = weather_data["main"]["temp"]
     humidity = weather_data["main"]["humidity"]
 
+    print(f"{dateTime_string:^{PADDING}}", end="")
+    print(f"{time_string:^{PADDING}}", end="")
     print(f"{city:^{PADDING}}", end="")
     print(
         f"\t{weather_description.capitalize():^{PADDING}}",
@@ -68,11 +75,13 @@ def simple_output(location):
     # print(weather_data)
     display_weather_info(weather_data)
     # print(x)
-    time.sleep(1)
+    # time.sleep(1)
 
 
 if __name__ == "__main__":
     user_args = ["Dallas", "Lusaka", "Miami", "Austin", "Houston", "London"]
 
-    for x in user_args:
-        simple_output(x)
+    for x in range(6):
+        for x in user_args:
+            simple_output(x)
+        time.sleep(1)
