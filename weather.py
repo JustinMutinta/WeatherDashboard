@@ -78,18 +78,20 @@ def display_weather_info(weather_data, imperial=False):
     city = weather_data["name"]
     weather_description = weather_data["weather"][0]["description"]
     temperature = weather_data["main"]["temp"]
+    humidity = weather_data["main"]["humidity"]
 
     print(f"{city:^{PADDING}}", end="")
     print(
         f"\t{weather_description.capitalize():^{PADDING}}",
         end=" ",
     )
-    print(f"({temperature}°{'F' if imperial else 'C'})")
+    print(f"{temperature}°{'F' if imperial else 'C'}", end=" ")
+    print(f"{humidity}%")
 
 
 if __name__ == "__main__":
     # user_args = read_user_cli_args()
-    user_args = ["Dallas", "Lusaka"]
+    user_args = ["Dallas", "Lusaka", "Miami", "Austin", "Houston", "London"]
     print(user_args)
     print(type(user_args))
     # user_args = "new york"
@@ -97,7 +99,7 @@ if __name__ == "__main__":
     for x in user_args:
         query_url = build_weather_query(x, "-i")
         weather_data = get_weather_data(query_url)
-        print(weather_data)
+        # print(weather_data)
         display_weather_info(weather_data)
-        print(x)
+        # print(x)
         time.sleep(1)
