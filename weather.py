@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import os
 import sys
 import time
 import csv
@@ -15,7 +16,7 @@ PADDING = 20
 
 def build_weather_query(city_input, imperial=False):
     api_key = _get_api_key()
-    url_encoded_city_name = city_input
+    url_encoded_city_name = parse.quote(city_input)
     units = "imperial" if imperial else "metric"
     url = (
         f"{BASE_WEATHER_API_URL}?q={url_encoded_city_name}"
@@ -25,6 +26,9 @@ def build_weather_query(city_input, imperial=False):
 
 
 def _get_api_key():
+    key = os.environ.get("OPENWEATHER_API_KEY")
+    if key:
+        return key
     config = ConfigParser()
     config.read("secrets.ini")
     return config["openweather"]["api_key"]
@@ -75,7 +79,7 @@ def display_weather_info(weather_data, imperial=False):
         writer.writerow([dateTime_string, time_string, city, weather_description, temperature, humidity])
 
 def simple_output(location):
-    query_url = build_weather_query(location, "-i")
+    query_url = build_weather_query(location)
     weather_data = get_weather_data(query_url)
     display_weather_info(weather_data)
 
